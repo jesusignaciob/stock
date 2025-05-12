@@ -8,6 +8,7 @@ export interface StockItem {
   rating_from: string;
   rating_to: string;
   time: string;
+  classifications: string[];
 }
 
 export interface StockResponse {
@@ -22,11 +23,14 @@ export interface Response {
   success: boolean;
 }
 
-export interface StockQueryParams {
+interface PaginationParams {
   page: number;
   pageSize: number;
   sortField: string;
-  sortOrder: number; // 1 for asc, -1 for desc
+  sortOrder?: number; // 1 for asc, -1 for desc
+}
+
+export interface StockQueryParams extends PaginationParams {
   filters?: Record<
     string,
     {
@@ -98,20 +102,45 @@ export interface StockQueryParams {
 // Función real para conectarse a una API (ejemplo con axios)
 import axios from 'axios';
 
+function buildPaginationQuery(params: PaginationParams): string {
+  const { sortOrder, ...rest } = params;
+  const searchParams = new URLSearchParams();
+  
+  Object.entries(rest).forEach(([key, value]) => {
+    if (value !== undefined) searchParams.append(key, String(value));
+  });
+  
+  if (sortOrder) searchParams.append('sortOrder', String(sortOrder));
+  
+  return `?${searchParams.toString()}`;
+}
+
+function prepareFilters<T extends string>(
+  rawFilters?: Record<T, { value: any; matchMode: string }>
+): Partial<Record<T, { value: any; matchMode: string }>> | undefined {
+  
+  if (!rawFilters) return undefined;
+
+  return (Object.keys(rawFilters) as T[]).reduce((acc, key) => {
+    const filter = rawFilters[key];
+    if (filter.value != null && filter.value !== '') {
+      acc[key] = {
+        value: filter.value,
+        matchMode: filter.matchMode
+      };
+    }
+    return acc;
+  }, {} as Partial<Record<T, { value: any; matchMode: string }>>);
+}
+
 export async function fetchStocks(params: StockQueryParams): Promise<StockResponse> {
   try {
-    const response = await axios.get<Response>('/api/v1/stocks', {
-      params: {
-        page: params.page,
-        pageSize: params.pageSize,
-        sortField: params.sortField,
-        sortOrder: params.sortOrder,
-        filters: JSON.stringify(params.filters)
-      }
+    const filters = prepareFilters(params.filters);
+    const response = await axios.post<Response>(`/api/v1/stocks${buildPaginationQuery({ page: params.page, pageSize: params.pageSize, sortField: params.sortField, sortOrder: params.sortOrder })}`, {
+      filters: filters
     });
 
     if (response.data.success) {
-      console.log('Response from API:', response.data.data);
       return response.data.data;
     }
 

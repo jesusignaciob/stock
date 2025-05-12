@@ -8,6 +8,7 @@ import App from "./App.vue";
 import router from "./router";
 
 import Noir from "./presets/Noir.ts";
+import { InputText, Button, Select, Tag, DatePicker, Chip, MultiSelect, Dialog, Divider } from "primevue";
 
 const app = createApp(App);
 
@@ -23,5 +24,16 @@ app.use(PrimeVue, {
     },
   },
 });
+
+
+app.component('InputText', InputText);
+app.component('Dropdown', Select);
+app.component('Button', Button);
+app.component('Tag', Tag);
+app.component('Chip', Chip);
+app.component('MultiSelect', MultiSelect);
+app.component('DatePicker', DatePicker);
+app.component('Dialog', Dialog);
+app.component('Divider', Divider);
 
 app.mount("#app");

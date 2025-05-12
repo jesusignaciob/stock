@@ -29,8 +29,6 @@ export const useStockStore = defineStore("stock", () => {
         filters: filters.value,
       });
 
-      console.log("Response from API:", response);
-
       stocks.value = response.items;
       pagination.value.totalRecords =
         response.totalRecords || response.items.length;
