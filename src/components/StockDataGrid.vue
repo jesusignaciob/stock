@@ -158,7 +158,7 @@ const showDetails = (stock: any) => {
 
 <template>
     <div class="card">
-        <DataTable scrollable scrollHeight="400px" tableStyle="min-width: 50rem" :value="stockStore.stocks"
+        <DataTable scrollable scrollHeight="600px" tableStyle="min-width: 126rem" :value="stockStore.stocks"
             :loading="stockStore.loading" :rows="stockStore.pagination.pageSize"
             :totalRecords="stockStore.pagination.totalRecords" lazy paginator removableSort @sort="onSort"
             :filters="filters" filterDisplay="row" :globalFilterFields="['ticker', 'company', 'brokerage', 'action']"
@@ -177,13 +177,13 @@ const showDetails = (stock: any) => {
             <template #empty> No customers found. </template>
             <template #loading> Loading customers data. Please wait. </template>
 
-            <Column class="w-24 !text-end">
+            <Column class="w-12 !text-end">
                 <template #body="{ data }">
                     <Button icon="pi pi-eye" @click="showDetails(data)" severity="secondary" rounded></Button>
                 </template>
             </Column>
 
-            <Column field="ticker" header="Ticker" :showFilterMenu="false" sortable>
+            <Column class="w-24" field="ticker" header="Ticker" :showFilterMenu="false" sortable>
                 <template #filter="{ filterModel, filterCallback }">
                     <div class="flex flex-col gap-2">
                         <Dropdown v-model="filterModel.matchMode" :options="filterMatchModes" optionLabel="label"
@@ -194,7 +194,7 @@ const showDetails = (stock: any) => {
                 </template>
             </Column>
 
-            <Column field="company" header="Company" :showFilterMenu="false" sortable>
+            <Column class="w-50" field="company" header="Company" :showFilterMenu="false" sortable>
                 <template #filter="{ filterModel, filterCallback }">
                     <div class="flex flex-col gap-2">
                         <Dropdown v-model="filterModel.matchMode" :options="filterMatchModes" optionLabel="label"
@@ -205,7 +205,7 @@ const showDetails = (stock: any) => {
                 </template>
             </Column>
 
-            <Column field="brokerage" header="Brokerage" :showFilterMenu="false" sortable>
+            <Column class="w-50" field="brokerage" header="Brokerage" :showFilterMenu="false" sortable>
                 <template #filter="{ filterModel, filterCallback }">
                     <div class="flex flex-col gap-2">
                         <Dropdown v-model="filterModel.matchMode" :options="filterMatchModes" optionLabel="label"
@@ -216,7 +216,7 @@ const showDetails = (stock: any) => {
                 </template>
             </Column>
 
-            <Column field="action" header="action" :showFilterMenu="false" sortable>
+            <Column class="w-30" field="action" header="action" :showFilterMenu="false" sortable>
                 <template #body="{ data }">
                     <Tag :value="data.action" :severity="getSeverity(data.action)" />
                 </template>
@@ -230,26 +230,25 @@ const showDetails = (stock: any) => {
                 </template>
             </Column>
 
-            <Column field="rating_from" header="Rating" sortable style="width: 150px">
+            <Column class="w-50" field="rating_from" header="Rating" sortable>
                 <template #body="{ data }">
                     {{ data.rating_from }} → {{ data.rating_to }}
                 </template>
             </Column>
 
-            <Column field="target_from" header="Target" sortable class="w-50">
+            <Column class="w-50" field="target_from" header="Target" sortable>
                 <template #body="{ data }">
                     {{ data.target_from }} → {{ data.target_to }}
                 </template>
             </Column>
 
-            <Column field="time" header="Date" sortable>
+            <Column class="w-24" field="time" header="Date" sortable>
                 <template #body="{ data }">
                     {{ formatDate(data.time) }}
                 </template>
             </Column>
 
-
-            <Column field="classifications" header="Classifications">
+            <Column class="w-60" field="classifications" header="Classifications">
                 <template #body="{ data }">
                     <Chip v-for="(item, index) in data.classifications" :key="index" :label="item" class="mr-2 mb-2" />
                 </template>
@@ -258,8 +257,6 @@ const showDetails = (stock: any) => {
                         placeholder="Select classifications" display="chip" />
                 </template> -->
             </Column>
-
-
 
             <template #paginatorstart>
                 <Button type="button" icon="pi pi-refresh" text @click="stockStore.fetchData" />
@@ -280,15 +277,6 @@ const showDetails = (stock: any) => {
                 <Button label="Cerrar" icon="pi pi-times" @click="visible = false" class="p-button-text" />
             </template>
         </Dialog>
-
-        <!-- <Dialog v-model:visible="visible" modal header="state.selectedStock?.company || 'Details'" :style="{ width: '50vw' }">
-            
-            <div class="grid">
-                <div class="col-12 mt-4">
-                    <Button label="Close" icon="pi pi-times" @click="visible = false" class="p-button-text" />
-                </div>
-            </div>
-        </Dialog> -->
     </div>
 </template>
 

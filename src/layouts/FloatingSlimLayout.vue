@@ -28,7 +28,7 @@ const activeItem = ref(menuItems.value[0]);
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col bg-gray-50">
+    <div class="flex flex-col bg-gray-50">
         <!-- Floating Header -->
         <header class="sticky top-0 z-50 shadow-sm bg-white/80 backdrop-blur-sm border-b border-gray-100">
             <div class="container mx-auto px-4">
@@ -88,7 +88,7 @@ const activeItem = ref(menuItems.value[0]);
         </Sidebar>
 
         <!-- Main Content -->
-        <main class="flex-1 container mx-auto px-4 py-6">
+        <main class="flex-1 mx-auto">
             <router-view v-slot="{ Component }">
                 <transition name="fade" mode="out-in">
                     <component :is="Component" />
@@ -102,9 +102,7 @@ const activeItem = ref(menuItems.value[0]);
                 <div class="flex items-center justify-between text-sm text-gray-500">
                     <span>© 2023 StockFlow Analytics</span>
                     <div class="flex space-x-4">
-                        <a href="#" class="hover:text-gray-700">Terms</a>
-                        <a href="#" class="hover:text-gray-700">Privacy</a>
-                        <a href="#" class="hover:text-gray-700">Contact</a>
+                        <a href="/about" class="hover:text-gray-700">About</a>
                     </div>
                 </div>
             </div>
