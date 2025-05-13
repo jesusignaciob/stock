@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import DataGrid from '../components/DataGrid.vue'
+import StockDataGrid from '@/components/StockDataGrid.vue';
 </script>
 
 <template>
     <div class="container mx-auto px-4 py-6">
-        <DataGrid />
+        <StockDataGrid />
     </div>
 </template>

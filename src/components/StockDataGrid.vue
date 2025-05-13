@@ -5,7 +5,7 @@ import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import { useStockStore } from '@/stores/stockStore';
-import router from '@/router';
+import StockDetailsPanel from '@/components/StockDetailsPanel.vue'
 
 const stockStore = useStockStore();
 
@@ -272,56 +272,23 @@ const showDetails = (stock: any) => {
             </template>
         </DataTable>
 
-        <Dialog v-model:visible="visible" modal header="Stock Details" :style="{ width: '50vw' }">
-            <div class="card">
-                <h2>Stock Details</h2>
-                <p class="text-sm text-color-secondary">
-                    {{ selectedStock?.company }} ({{ selectedStock?.ticker }})
-                </p>
-                <p class="text-sm text-color-secondary">
-                    Last updated: {{ selectedStock?.time }}
-                </p>
-                <Divider />
-                <div
-                    class="hidden grid-cols-1 gap-2 border border-gray-200 rounded-lg p-4 bg-gray-50 shadow-sm md:hidden">
-                    <!-- Fila 1 -->
-                    <div class="font-semibold text-gray-700 text-sm uppercase tracking-wider">
-                        Target Price
-                    </div>
-                    <div class="text-gray-600 text-sm pb-2 border-b border-gray-100">
-                        {{ selectedStock?.target_from }} → {{ selectedStock?.target_to }}
-                    </div>
+        <Dialog v-model:visible="visible" :header="selectedStock?.company || 'Details'"
+            :style="{ width: 'min(90vw, 700px)' }" :modal="true">
+            <StockDetailsPanel v-if="selectedStock" :stock="selectedStock" />
 
-                    <!-- Fila 2 -->
-                    <div class="font-semibold text-gray-700 text-sm uppercase tracking-wider pt-2">
-                        Rating
-                    </div>
-                    <div class="text-gray-600 text-sm pb-2 border-b border-gray-100">
-                        {{ selectedStock?.rating_from }} → {{ selectedStock?.rating_to }}
-                    </div>
+            <template #footer>
+                <Button label="Cerrar" icon="pi pi-times" @click="visible = false" class="p-button-text" />
+            </template>
+        </Dialog>
 
-                    <!-- Fila 3 -->
-                    <div class="font-semibold text-gray-700 text-sm uppercase tracking-wider pt-2">
-                        Brokerage
-                    </div>
-                    <div class="text-gray-600 text-sm">
-                        {{ selectedStock?.brokerage }}
-                    </div>
-                </div>
-                <Divider />
-                <h4>Classifications</h4>
-                <div class="flex flex-wrap gap-2">
-                    <Tag v-for="(classification, index) in selectedStock?.classifications" :key="index"
-                        :value="classification" severity="info" />
-                </div>
-            </div>
-            <Divider />
+        <!-- <Dialog v-model:visible="visible" modal header="state.selectedStock?.company || 'Details'" :style="{ width: '50vw' }">
+            
             <div class="grid">
                 <div class="col-12 mt-4">
                     <Button label="Close" icon="pi pi-times" @click="visible = false" class="p-button-text" />
                 </div>
             </div>
-        </Dialog>
+        </Dialog> -->
     </div>
 </template>
 

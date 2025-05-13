@@ -8,7 +8,7 @@ import App from "./App.vue";
 import router from "./router";
 
 import Noir from "./presets/Noir.ts";
-import { InputText, Button, Select, Tag, DatePicker, Chip, MultiSelect, Dialog, Divider } from "primevue";
+import { InputText, Button, Select, Tag, DatePicker, Chip, MultiSelect, Dialog, Divider, ProgressBar, Message, Badge, Card, InputIcon } from "primevue";
 
 const app = createApp(App);
 
@@ -35,5 +35,10 @@ app.component('MultiSelect', MultiSelect);
 app.component('DatePicker', DatePicker);
 app.component('Dialog', Dialog);
 app.component('Divider', Divider);
+app.component('ProgressBar', ProgressBar);
+app.component('Message', Message);
+app.component('Badge', Badge);
+app.component('Card', Card);
+app.component('InputIcon', InputIcon);
 
 app.mount("#app");

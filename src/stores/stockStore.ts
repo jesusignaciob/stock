@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { StockItem } from "@/api/stockApi";
 import { fetchStocks } from "@/api/stockApi";
+import type { StockItem } from "@/types/stock";
 
 export const useStockStore = defineStore("stock", () => {
   const stocks = ref<StockItem[]>([]);

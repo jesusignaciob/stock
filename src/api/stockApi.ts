@@ -1,44 +1,4 @@
-export interface StockItem {
-  ticker: string;
-  target_from: string;
-  target_to: string;
-  company: string;
-  action: string;
-  brokerage: string;
-  rating_from: string;
-  rating_to: string;
-  time: string;
-  classifications: string[];
-}
-
-export interface StockResponse {
-  items: StockItem[];
-  page: number;
-  totalRecords?: number;
-  order_by: string;
-}
-
-export interface Response {
-  data: StockResponse;
-  success: boolean;
-}
-
-interface PaginationParams {
-  page: number;
-  pageSize: number;
-  sortField: string;
-  sortOrder?: number; // 1 for asc, -1 for desc
-}
-
-export interface StockQueryParams extends PaginationParams {
-  filters?: Record<
-    string,
-    {
-      value: any;
-      matchMode: string;
-    }
-  >;
-}
+import type { Response } from '@/types/stock'
 
 // Función mock - reemplaza con tu llamada API real
 // export async function fetchStocks(
@@ -100,6 +60,7 @@ export interface StockQueryParams extends PaginationParams {
 // }
 
 // Función real para conectarse a una API (ejemplo con axios)
+import type { PaginationParams, StockQueryParams, StockResponse } from '@/types/stock';
 import axios from 'axios';
 
 function buildPaginationQuery(params: PaginationParams): string {
