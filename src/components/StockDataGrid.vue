@@ -5,7 +5,7 @@ import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import { useStockStore } from '@/stores/stockStore';
-import StockDetailsPanel from '@/components/StockDetailsPanel.vue'
+import StockDetailsPanel from '@/components/StockDetailsPanel.vue';
 
 const stockStore = useStockStore();
 
@@ -19,7 +19,6 @@ const onPageChange = (event: any) => {
 
 // Sorting
 const onSort = (event: any) => {
-    console.log('Sorting', event);
     stockStore.setSort(event.sortField, event.sortOrder);
 };
 
@@ -87,45 +86,45 @@ const getSeverity = (status: string) => {
         case 'upgraded by':
             return 'warn';
     }
-}
+};
 
 type StockClassification =
-    // Por sector/industria
+    // By sector/industry
     | 'Tech'
     | 'Biotech'
     | 'Financial'
     | 'Energy'
     | 'Other Sector'
 
-    // Por acción de precio objetivo
+    // By target price action
     | 'High-Risk Speculative'
     | 'Potential Growth'
 
-    // Por acción de analistas
+    // By analyst action
     | 'Bullish Signal'
     | 'Bearish Signal'
     | 'New Coverage'
 
-    // Por rating
+    // By rating
     | 'Analyst Positive'
     | 'Analyst Negative'
 
-    // Clasificación por defecto
+    // Default classification
     | 'Neutral';
 
 const ALL_CLASSIFICATIONS: StockClassification[] = [
-    // Sectoriales
+    // Sector classifications
     'Tech',
     'Biotech',
     'Financial',
     'Energy',
     'Other Sector',
 
-    // Precio objetivo
+    // Target price actions
     'High-Risk Speculative',
     'Potential Growth',
 
-    // Acciones analistas
+    // Analyst actions
     'Bullish Signal',
     'Bearish Signal',
     'New Coverage',
@@ -164,14 +163,8 @@ const showDetails = (stock: any) => {
             :filters="filters" filterDisplay="row" :globalFilterFields="['ticker', 'company', 'brokerage', 'action']"
             @page="onPageChange" @filter="onFilter" class="p-datatable-sm">
             <template #header>
-                <div class="flex justify-between">
-                    <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined @click="clearFilters()" />
-                    <IconField>
-                        <InputIcon>
-                            <i class="pi pi-search" />
-                        </InputIcon>
-                        <InputText v-model="filters['company'].value" placeholder="Keyword Search" />
-                    </IconField>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <span class="text-xl font-bold">Stocks</span>
                 </div>
             </template>
             <template #empty> No customers found. </template>
@@ -259,6 +252,7 @@ const showDetails = (stock: any) => {
             </Column>
 
             <template #paginatorstart>
+                <Button type="button" icon="pi pi-filter-slash" text @click="clearFilters" />
                 <Button type="button" icon="pi pi-refresh" text @click="stockStore.fetchData" />
             </template>
 
