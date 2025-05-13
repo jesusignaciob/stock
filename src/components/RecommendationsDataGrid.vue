@@ -5,6 +5,8 @@ import Column from 'primevue/column';
 import { storeToRefs } from 'pinia';
 import type { StockRecommendation } from '@/types/recommendation';
 import StockRecommendationPanel from './StockRecommendationPanel.vue';
+import HelpStockRecommendationPanel from './HelpStockRecommendationPanel.vue';
+import { ref } from 'vue';
 
 const store = useRecommendationStore();
 const { showDetails, closeDialog, fetchData } = store;
@@ -19,11 +21,20 @@ const getScoreRange = (score: number): 'high' | 'medium' | 'low' => {
     return 'low';
 };
 
-const scoreClasses = {
-  high: 'bg-green-500 text-white font-bold px-3 py-1 rounded-full',
-  medium: 'bg-yellow-500 text-gray-800 font-bold px-3 py-1 rounded-full',
-  low: 'bg-red-500 text-white font-bold px-3 py-1 rounded-full'
+const getLevel = (status: string) => {
+    switch (status) {
+        case 'low':
+            return 'warn';
+
+        case 'high':
+            return 'success';
+
+        case 'medium':
+            return 'info';
+    }
 };
+
+const helpVisible = ref(false);
 </script>
 
 <template>
@@ -42,7 +53,8 @@ const scoreClasses = {
                     <template #header>
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <span class="text-xl font-bold">Best Investments</span>
-                            <Button icon="pi pi-refresh" rounded raised @click="fetchData" :loading="state.loading" />
+                            <Button icon="pi pi-question-circle" @click="helpVisible = true"
+                                class="p-button-rounded p-button-text" v-tooltip="'View methodology'" />
                         </div>
                     </template>
 
@@ -66,10 +78,13 @@ const scoreClasses = {
 
                     <Column field="score" header="Score" sortable>
                         <template #body="{ data }: { data: StockRecommendation }">
-                            <Chip :label="data.score.toString()"
-                                :class=scoreClasses[getScoreRange(data.score)] />
+                            <Tag :value="data.score.toString()" :severity="getLevel(getScoreRange(data.score))" />
                         </template>
                     </Column>
+
+                    <template #paginatorstart>
+                        <Button type="button" icon="pi pi-refresh" text @click="fetchData" :loading="state.loading" />
+                    </template>
                 </DataTable>
             </template>
         </Card>
@@ -82,12 +97,19 @@ const scoreClasses = {
                 <Button label="Cerrar" icon="pi pi-times" @click="closeDialog" class="p-button-text" />
             </template>
         </Dialog>
+
+        <Dialog v-model:visible="helpVisible" header="Investment Recommendation System"
+            :style="{ width: 'min(90vw, 700px)' }" :modal="true">
+            <HelpStockRecommendationPanel />
+
+            <template #footer>
+                <Button label="Cerrar" icon="pi pi-times" @click="helpVisible = false" class="p-button-text" />
+            </template>
+        </Dialog>
     </div>
 </template>
 
 <style scoped>
-
-
 .recommendations-container {
     max-width: 1400px;
     margin: 0 auto;
